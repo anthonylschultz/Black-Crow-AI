@@ -13,7 +13,6 @@ FROM
 
 
 -- 1b) How many different users generated those page views?
-
 => 15,184 unique users
 
 -- Users that Generated Page Views
@@ -32,7 +31,6 @@ FROM
 
 
 -- 2a) How many page views are there by score?
-
 score | count_page_views
 null | 551
 1 | 3510
@@ -96,7 +94,6 @@ ORDER BY
 
 
 -- Unique Users for each Score
-
 score | count_page_views | count_users  
 null | 551 | 350
 1 | 3510 | 2525
@@ -128,7 +125,6 @@ Note the 168 hour interval chosen as a window to include purchases 7 days after 
 made to use hours instead of days to err on the side of accuracy, rather than using days. The DATETIME field in UTC was also used
 instead of the date field in ET.
 */
-
 
 score | count_purchasers | count_purchases
 (null) | 161 | 234
