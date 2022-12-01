@@ -79,7 +79,7 @@ null | 551 | 551
 9 | 3950 | 3950
 10| 4107 | 4107
 
--- Users for each Score
+-- Users for Each Score
 
 SELECT
   score,
@@ -91,7 +91,6 @@ GROUP BY
   score
 ORDER BY
   score ASC
-
 
 -- Unique Users for each Score
 score | count_page_views | count_users  
@@ -121,9 +120,10 @@ ORDER BY
 
 -- 3) How many purchasers and purchases were there, by score? By a purchaser, we mean a unique user who made at least one purchase.
 /*
-Note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). This decision was
-made to use hours instead of days to err on the side of accuracy, rather than using days. Using minutes is also an option, but without more 
-context on the business objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET.
+Note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). The decision was
+made to use hours instead of days to err on the side of accuracy. Using minutes is also an option, but without more 
+context on the business objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET in 
+favor of accuracy.
 */
 
 score | count_purchasers | count_purchases
