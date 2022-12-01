@@ -42,7 +42,7 @@ null | 551
 7 | 3749
 8 | 3701
 9 | 3950
-10 | 4107
+10| 4107
 
 -- Page Views by Score
 
@@ -109,7 +109,7 @@ null | 551 | 350
 SELECT
   score,
   COUNT(page_view_id) AS count_page_views,
-  COUNT(DISTINCT visitor_id) AS count_users
+  COUNT(DISTINCT visitor_id) AS count_unique_users
 FROM
   `expanded-harbor-370301.test.page_views`
 GROUP BY
@@ -185,7 +185,7 @@ score | count_purchasers | count_purchases | purchase_rate
 7 | 161 | 369 | 2.29
 8 | 192 | 625 | 3.26
 9 | 267 | 1413 | 5.29
-10 | 280 | 3816 | 13.63
+10| 280 | 3816 | 13.63
 
 -- Purchase Rate by Score
 WITH
@@ -241,7 +241,7 @@ score | purchase_rate | average_prediction
 7 | 2.29 | 0.05
 8 | 3.26 | 0.09
 9 | 5.29 | 0.2
-10 | 13.63 | 0.6
+10| 13.63 | 0.6
 
 -- Pearson Correlation Coefficient between Purchase Rate and Average average_prediction 
 ~ 0.76 
