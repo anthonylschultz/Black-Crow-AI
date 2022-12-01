@@ -124,6 +124,9 @@ Note the 168 hour interval chosen as a window to include purchases 7 days after 
 made to use hours instead of days to err on the side of accuracy. Using minutes is also an option, but without more 
 context on the business objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET in 
 favor of accuracy.
+
+Another note: I noticed the results below indicate there are instances where purchases are attributed to more than one page view and hence score. 
+I'm uncertain of the use case of those results without additional context, but went ahead with those results. 
 */
 
 score | count_purchasers | count_purchases
