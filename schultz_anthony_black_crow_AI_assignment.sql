@@ -122,8 +122,8 @@ ORDER BY
 -- 3) How many purchasers and purchases were there, by score? By a purchaser, we mean a unique user who made at least one purchase.
 /*
 Note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). This decision was
-made to use hours instead of days to err on the side of accuracy, rather than using days. The DATETIME field in UTC was also used
-instead of the date field in ET.
+made to use hours instead of days to err on the side of accuracy, rather than using days. Using minutes is also an option, but without more 
+context on the business objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET.
 */
 
 score | count_purchasers | count_purchases
@@ -225,7 +225,7 @@ GROUP BY
 -- predictions appear to "work"?
 
 /*
-The average prediction seems to correlate closely with the average prediction score. To validate this, I computed the Pearson 
+The average prediction seems to correlate closely with the average prediction score. To validate this, I computed the Pearson Correlation 
 Coefficient between the average prediction and the average prediction score which resulted in 0.76, a strong positive correlation.
 Using this metric, the predictions do appear to "work".
 */
@@ -242,6 +242,9 @@ score | purchase_rate | average_prediction
 8 | 3.26 | 0.09
 9 | 5.29 | 0.2
 10 | 13.63 | 0.6
+
+-- Pearson Correlation Coefficient between Purchase Rate and Average average_prediction 
+~ 0.76 
 
 -- Purchase Rate, Average Prediction by Score
 WITH
