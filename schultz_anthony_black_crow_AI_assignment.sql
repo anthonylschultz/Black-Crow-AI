@@ -66,6 +66,8 @@ Seeing as though there's a 1-1 relationship between count_page_views and users, 
 that outputs count_unique_users for each score. 
 */
 
+-- Users for Each Score
+
 score | count_page_views | count_users  
 null | 551 | 551
 1 | 3510 | 3510 
@@ -78,8 +80,6 @@ null | 551 | 551
 8 | 3701 | 3701
 9 | 3950 | 3950
 10| 4107 | 4107
-
--- Users for Each Score
 
 SELECT
   score,
@@ -131,7 +131,7 @@ made to use hours instead of days to err on the side of accuracy. Using minutes 
 objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the DATE field in ET in favor of accuracy.
 */
 
-score,count_purchasers,count_purchases
+score | count_purchasers | count_purchases
 (null) | 161 | 336
 1 | 9  | 58
 2 | 16 | 31
@@ -222,7 +222,7 @@ SELECT
   score,
   COUNT(DISTINCT purchaser_id) AS count_purchasers,
   COUNT(purchase_id) AS count_purchases,
-  ROUND(CAST(SAFE_DIVIDE(COUNT( purchase_id), COUNT(DISTINCT purchaser_id)) AS float64), 2) AS purchase_rate
+  ROUND(CAST(SAFE_DIVIDE(COUNT(purchase_id), COUNT(DISTINCT purchaser_id)) AS float64), 2) AS purchase_rate
 FROM
   page_views_joined_purchases
 GROUP BY
@@ -236,7 +236,7 @@ ORDER BY
 /*
 The average prediction seems to correlate closely with the average prediction score. To validate this, I computed the Pearson Correlation 
 Coefficient between the average prediction and the average prediction score which resulted in 0.76, a strong positive correlation.
-Using this metric, the predictions do appear to "work", though more analysis on a larger sample would offer more credence to this hypothesis.
+Using this metric, the predictions do appear to "work", though additional analysis on a larger sample would offer more credence to this hypothesis.
 */
 
 score | purchase_rate | average_prediction
