@@ -121,17 +121,14 @@ ORDER BY
 -- 3) How many purchasers and purchases were there, by score? By a purchaser, we mean a unique user who made at least one purchase.
 
 /*
-I noticed the results below indicate there are instances where purchases are attributed to more than one page view and hence score. In other words, 
-purchases are counted more than across several scores. I'm uncertain of the use case of those results without additional context, but went ahead reporting those 
-results since the question specifies unique users but does not specify unique purchases. With that, notice the query counts unique purchaser IDs and 
-NOT unique purchase IDs. 
+I noticed the results below indicate there are instances where purchases are attributed to more than one page view and hence score. Intuition tells
+me that one purchase can be attributed to more than one page view, thus why the results indicate multiple purchases per page view. The question
+specifies unique users and does not specify unique purchases, hence why I reported these results. That said, I can envision an argument to report 
+unique purchases which I'm happy to discuss. For the purposes of this exercise, however, I reported non-unique purchase IDs throughout the remainder of the exercise.
 
-I can envision an argument to specify unique purchase IDs which I'm happy to discuss. For the purposes of this exercise, however, I reported on non-unique 
-purchase IDs throughout the remainder of the analysis.
-
-Also, please note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). The decision was
+Also, please note the 168 hour interval chosen as a window to include purchases seven days after a page view (24 hours * 7 days). The decision was
 made to use hours instead of days to err on the side of accuracy. Using minutes is also an option, but without more context on the business 
-objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET in favor of accuracy.
+objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the DATE field in ET in favor of accuracy.
 */
 
 score,count_purchasers,count_purchases
