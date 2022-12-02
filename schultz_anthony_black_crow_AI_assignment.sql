@@ -119,28 +119,34 @@ ORDER BY
 
 
 -- 3) How many purchasers and purchases were there, by score? By a purchaser, we mean a unique user who made at least one purchase.
-/*
-Note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). The decision was
-made to use hours instead of days to err on the side of accuracy. Using minutes is also an option, but without more 
-context on the business objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET in 
-favor of accuracy.
 
-Another note: I noticed the results below indicate there are instances where purchases are attributed to more than one page view and hence score. 
-I'm uncertain of the use case of those results without additional context, but went ahead with those results. 
+/*
+I noticed the results below indicate there are instances where purchases are attributed to more than one page view and hence score. In other words, 
+purchases are counted more than across several scores. I'm uncertain of the use case of those results without additional context, but went ahead reporting those 
+results since the question specifies unique users but does not specify unique purchases. With that, notice the query counts unique purchaser IDs and 
+NOT unique purchase IDs. 
+
+I can envision an argument to specify unique purchase IDs which I'm happy to discuss. For the purposes of this exercise, however, I reported on non-unique 
+purchase IDs throughout the remainder of the analysis.
+
+Also, please note the 168 hour interval chosen as a window to include purchases 7 days after a page view (24 hours * 7 days). The decision was
+made to use hours instead of days to err on the side of accuracy. Using minutes is also an option, but without more context on the business 
+objectives, hours seem sufficient. The DATETIME field in UTC was also used instead of the date field in ET in favor of accuracy.
 */
 
-score | count_purchasers | count_purchases
-(null) | 161 | 234
-1 | 9 | 17
-2 | 16 | 26
-3 | 65 | 113
-4 | 69 | 118
-5 | 99 | 158
-6 | 124 | 210
-7 | 161 | 264
-8 | 192 | 314
-9 | 267 | 431
-10| 280 | 453
+score,count_purchasers,count_purchases
+(null) | 161 | 336
+1 | 9  | 58
+2 | 16 | 31
+3 | 65 | 116
+4 | 69 | 138
+5 | 99 | 177
+6 | 124 | 254
+7 | 161 | 369
+8 | 192 | 625
+9 | 267 | 1413
+10 | 280 | 3816
+
 
 -- Number of Purchasers and Purchases by Score
 WITH
@@ -168,11 +174,13 @@ WITH
 SELECT
   score,
   COUNT(DISTINCT purchaser_id) AS count_purchasers,
-  COUNT(DISTINCT purchase_id) AS count_purchases
+  COUNT(purchase_id) AS count_purchases
 FROM
   page_views_joined_purchases
 GROUP BY
   score
+ORDER BY 
+  score ASC
 
 
 -- 4) What is the purchase rate by score: that is, the count of purchases divided by the count of users for each score?
@@ -216,13 +224,14 @@ WITH
 SELECT
   score,
   COUNT(DISTINCT purchaser_id) AS count_purchasers,
-  COUNT( purchase_id) AS count_purchases,
+  COUNT(purchase_id) AS count_purchases,
   ROUND(CAST(SAFE_DIVIDE(COUNT( purchase_id), COUNT(DISTINCT purchaser_id)) AS float64), 2) AS purchase_rate
 FROM
   page_views_joined_purchases
 GROUP BY
   score
-
+ORDER BY 
+  score ASC
 
 -- 5) What is the average prediction for each score, and how does this compare to the purchase rate for each score? Do our 
 -- predictions appear to "work"?
@@ -230,7 +239,7 @@ GROUP BY
 /*
 The average prediction seems to correlate closely with the average prediction score. To validate this, I computed the Pearson Correlation 
 Coefficient between the average prediction and the average prediction score which resulted in 0.76, a strong positive correlation.
-Using this metric, the predictions do appear to "work".
+Using this metric, the predictions do appear to "work", though more analysis on a larger sample would offer more credence to this hypothesis.
 */
 
 score | purchase_rate | average_prediction
@@ -277,12 +286,14 @@ SELECT
   score,
   -- COUNT(DISTINCT purchaser_id) AS count_purchasers,
   -- COUNT(purchase_id) AS count_purchases,
-  ROUND(CAST(SAFE_DIVIDE(COUNT( purchase_id), COUNT(DISTINCT purchaser_id)) AS float64), 2) AS purchase_rate,
+  ROUND(CAST(SAFE_DIVIDE(COUNT(purchase_id), COUNT(DISTINCT purchaser_id)) AS float64), 2) AS purchase_rate,
   ROUND(AVG(page_views_joined_purchases.prediction), 2) AS average_prediction
 FROM
   page_views_joined_purchases
 GROUP BY
   score
+ORDER BY 
+  score ASC
 
 -- Pearson Coefficient of Purchase Rate, Average Prediction by Score
 WITH
